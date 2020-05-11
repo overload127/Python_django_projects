@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 
 
 class Bb(models.Model):
@@ -9,6 +10,17 @@ class Bb(models.Model):
         auto_now_add=True, db_index=True, verbose_name='Опубликовано')
     rubric = models.ForeignKey(
         'Rubric', null=True, on_delete=models.PROTECT, verbose_name='Рубрика')
+
+    def clean(self):
+        errors = {}
+        if not self.content:
+            errors['content'] = ValidationError('Укажите описание '
+                                                'продаваемого товара')
+        if self.price and self.price < 0:
+            errors['price'] = ValidationError(
+                'Укажите неотрицательное значение цены')
+        if errors:
+            raise ValidationError(errors)
 
     class Meta:
         verbose_name_plural = 'Объявления'
