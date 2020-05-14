@@ -75,6 +75,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
+                'main.middlewares.bboard_context_processor',
             ],
         },
     },
@@ -146,8 +147,11 @@ EMAIL_USE_TLS = True
 
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.vk.VKOAuth2',          # бекенд авторизации через ВКонтакте
-    'django.contrib.auth.backends.ModelBackend', # бекенд классической аутентификации, чтобы работала авторизация через обычный логин и пароль
+    # бекенд авторизации через ВКонтакте
+    'social_core.backends.vk.VKOAuth2',
+    # бекенд классической аутентификации, чтобы работала авторизация
+    # через обычный логин и пароль
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 # find in security.py

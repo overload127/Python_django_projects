@@ -5,10 +5,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.views import PasswordChangeView
-from django.contrib.auth.views import PasswordResetView
-from django.contrib.auth.views import PasswordResetDoneView
-from django.contrib.auth.views import PasswordResetConfirmView
 from django.contrib.auth.views import PasswordResetCompleteView
+from django.contrib.auth.views import PasswordResetConfirmView
+from django.contrib.auth.views import PasswordResetDoneView
+from django.contrib.auth.views import PasswordResetView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.signing import BadSignature
 from django.http import Http404, HttpResponse
@@ -27,10 +27,6 @@ from .utilities import signer
 
 
 def index(request):
-    return render(request, 'main/index.html')
-
-
-def index2(request, uidb64, token):
     return render(request, 'main/index.html')
 
 
@@ -68,20 +64,14 @@ class BBLoginView(LoginView):
 
 
 class BBPasswordResetView(PasswordResetView):
-    # template_name = 'main/password_reset_request.html'
-    # subject_template_name = 'email/password_subject_request.txt'
-    # email_template_name = 'email/password_reset_request.txt'
     success_url = reverse_lazy('main:password_reset_done')
-    # success_message = 'Письмо для сброса пароля отправлено на email'
 
 
 class BBPasswordResetDoneView(PasswordResetDoneView):
     pass
-    # template_name = 'main/password_reset_done.html'
 
 
 class BBPasswordResetConfirmView(PasswordResetConfirmView):
-    # template_name = 'main/password_reset_confirm.html'
     post_reset_login = False
     success_url = reverse_lazy('main:password_reset_complete')
 
@@ -149,3 +139,7 @@ class DeleteUserView(LoginRequiredMixin, DeleteView):
         if not queryset:
             queryset = self.get_queryset()
         return get_object_or_404(queryset, pk=self.user_id)
+
+
+def by_rubric(request, pk):
+    pass
