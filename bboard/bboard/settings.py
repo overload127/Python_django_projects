@@ -9,8 +9,11 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
-
 import os
+# from security import SECRET_KEY, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
+
+from bboard.security import *
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -19,14 +22,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
+# find in security.py
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'kec#5dch*(i7-n-+%78wqij@p4q(l%87g85*nejwn3-4wf4=2g'
+# SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    '127.0.0.1',
     '192.168.1.103',
+    'localhost',
 ]
 
 
@@ -41,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrap4',
     'main.apps.MainConfig',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -66,6 +73,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -130,6 +139,20 @@ STATIC_URL = '/static/'
 # smtp (gmail)
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+# find in security.py
+# EMAIL_HOST_USER = ''
+# EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = True
+
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',          # бекенд авторизации через ВКонтакте
+    'django.contrib.auth.backends.ModelBackend', # бекенд классической аутентификации, чтобы работала авторизация через обычный логин и пароль
+)
+
+# find in security.py
+# SOCIAL_AUTH_VK_OAUTH2_KEY = ''
+# SOCIAL_AUTH_VK_OAUTH2_SECRET = ''
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+
+LOGIN_REDIRECT_URL = '/'

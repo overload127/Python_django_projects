@@ -32,12 +32,14 @@
                         <a class="dropdown-item" href="{% url 'main:password_change' %}">Изменить пароль</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'main:logout' %}">Выйти</a>
-                        <a class="dropdown-item" href="#">Удалить</a>
+                        <a class="dropdown-item" href="{% url 'main:profile_delete' %}">Удалить</a>
                     </div>
                 </li>
                 {% else %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'main:register' %}">Регистарция</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'main:password_reset_request' %}">Сброс пароля</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'main:login' %}">Вход</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'social:begin' 'vk-oauth2' %}">Войти через ВКонтакте</a></li>
                 {% endif %}
             </ul>
         </div>
