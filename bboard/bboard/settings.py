@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'bootstrap4',
     'main.apps.MainConfig',
     'social_django',
+    'django_cleanup',
+    'easy_thumbnails',
 ]
 
 MIDDLEWARE = [
@@ -160,3 +162,16 @@ AUTHENTICATION_BACKENDS = (
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
 
 LOGIN_REDIRECT_URL = '/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+THUMBNAIL_ALIASES = {
+    '': {
+        'default': {
+            'size': (96, 96),
+            'crope': 'scale',
+        },
+    },
+}
+THUMBNAIL_BASEDIR = 'thumbnails'

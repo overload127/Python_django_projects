@@ -1,3 +1,6 @@
+from datetime import datetime
+from os.path import splitext
+
 from bboard.settings import ALLOWED_HOSTS
 
 from django.core.signing import Signer
@@ -18,3 +21,7 @@ def send_activation_notification(user):
     subject = render_to_string('email/activation_letter_subject.txt', context)
     body_text = render_to_string('email/activation_letter_body.txt', context)
     user.email_user(subject, body_text)
+
+
+def get_timestamp_path(instance, filename):
+    return '{0}{1}'.format(datetime.now().timestamp(), splitext(filename)[1])
