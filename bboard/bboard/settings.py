@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'social_django',
     'django_cleanup',
     'easy_thumbnails',
+    'captcha',
 ]
 
 MIDDLEWARE = [
