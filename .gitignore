@@ -133,3 +133,6 @@ dmypy.json
 
 # python security settings
 security.py
+
+# angular
+bbclient/
