@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock title %}
+{% block header %}Главная{% endblock header %}
+
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    <div>
+    {% for field in userform %}
+    <div class="form-group">
+        {{field.label_tag}}
+        <div>{{field}}</div>
+        {% if field.errors%}
+        {% for error in field.errors %}
+        <div class="alert alert-danger">
+            {{error}}
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    {% endfor %}
+    </div>
+    <input type="submit" value="Send" >
+</form>
+<p>{% now "Y" %}</p>
+<p>{% now "F j Y" %}</p>
+<p>{% now "N, j, Y" %}</p>
+<p>{% now "N j, Y, P" %}</p>
+
+{% if n > 0 %}
+    <p>Число положительное</p>
+{% elif n < 0 %}
+    <p>Число отрицательное</p>
+{% else %}
+    <p>Число равно нулю</p>
+{% endif %}
+
+{% for lan in langs %}
+<li>{{ lan }}</li>
+{% empty %}
+<li>Langs array is empty</li>
+{% endfor %}
+
+{% with name="Tom" age=29 %}
+<div>
+    <p>Name: {{ name }}</p>
+    <p>Age: {{ age }}</p>
+</div>
+{% endwith %}
+{% endblock content %}

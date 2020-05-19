@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Модели в Django{% endblock title %}
+{% block header %}Модели в Django{% endblock header %}
+
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    <p>
+        <label>Введите имя</label>
+        <input type="text" name="name" value="{{ person.name }}" />
+    </p>
+    <p>
+        <label>Ввкдите возраст</label>
+        <input type="number" name="age" value="{{ person.age }}" />
+    </p>
+    <input type="submit" value="Сохранить" >
+</form>
+{% if people.count > 0 %}
+<h2>Список пользователей</h2>
+<table>
+    <tr><th>Id</th><th>Имя</th><th>Возраст</th></tr>
+    {% for person in people %}
+    <tr><td>{{ person.id }}</td><td>{{ person.name }}</td><td>{{ person.age }}</td></tr>
+    {% endfor %}
+</table>
+{% endif %}
+{% endblock content %}
