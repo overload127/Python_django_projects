@@ -1,0 +1,16 @@
+{% extends "layout/basic.html" %}
+
+{% block auth %}
+<ol>
+    {% if user.is_authenticated %}
+    <li><a href="{% url 'main:profile_page' %}">Профиль</a></li>
+    <li><a href="{% url 'main:edit_page' %}">Изменить профиль</a></li>
+    <li><a href="{% url 'main:logout_page' %}">Выход</a></li>
+    {% else %}
+    <li><a href="{% url 'main:login_page' %}">Вход</a></li>
+    <li><a href="{% url 'main:register_page' %}">Регистрация</a></li>
+    {% endif %}
+</ol>
+<br>
+<br>
+{% endblock auth %}

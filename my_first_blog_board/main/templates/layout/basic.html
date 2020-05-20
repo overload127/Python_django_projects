@@ -7,16 +7,11 @@
 </head>
 <body>
     <ol>
-        {% if user.is_authenticated %}
-        <li><a href="{% url 'main:logout' %}">Выход</a></li>
-        {% else %}
-        <li><a href="{% url 'main:login' %}">Вход</a></li>
-        <li><a href="{% url 'main:registration' %}">Регистрация</a></li>
-        {% endif %}
+        <li><a href="{% url 'main:home' %}">Главная</a></li>
     </ol>
-    <br>
-    <br>
+    {% block auth %}
+    {% endblock auth %}
     {% block content %}
-    {% endblock %}
+    {% endblock content %}
 </body>
 </html>

@@ -1,0 +1,12 @@
+{% extends "layout/basic_auth.html" %}
+
+{% block title %}Профиль - изменение данных{% endblock title %}
+
+{% block content %}
+<h2>Правка данных пользователя {{ user.username }}</h2>
+<form id="change_form" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" form="change_form">Сохранить</button>
+</form>
+{% endblock content %}

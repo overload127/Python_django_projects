@@ -4,4 +4,9 @@
 
 {% block content %}
 <h1>Регистрация на сайте</h1>
+<form id="add_form" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" form="add_form">Регистрация</button>
+</form>
 {% endblock content %}
