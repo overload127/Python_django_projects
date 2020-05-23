@@ -109,3 +109,34 @@ class ProductInOrder(models.Model):
 @receiver(post_save, sender=ProductInOrder)
 def product_in_order_save(sender, instance, *args, **kwargs):
     instance.order.save()
+
+
+class ProductInBasket(models.Model):
+    session_key = models.CharField(max_length=128)
+    order = models.ForeignKey(
+        Order, blank=True, null=True, default=None, on_delete=models.CASCADE,
+        verbose_name='Заказ')
+    product = models.ForeignKey(
+        Product, blank=True, null=True, default=None, on_delete=models.CASCADE,
+        verbose_name='Продукт')
+    number = models.IntegerField(default=1, verbose_name='Количество')
+    price_per_item = models.DecimalField(
+        max_digits=10, decimal_places=2, verbose_name='Цена продажи',
+        blank=True, null=True, default=None)
+    total_price = models.DecimalField(
+        max_digits=10, decimal_places=2, verbose_name='Сумма позиции',
+        blank=True, null=True, default=None)
+    is_active = models.BooleanField(default=True, verbose_name='Используется')
+    created = models.DateTimeField(
+        auto_now_add=True, auto_now=False,
+        verbose_name='Создан')
+    update = models.DateTimeField(
+        auto_now_add=False, auto_now=True,
+        verbose_name='Изменен')
+
+    def __str__(self):
+        return f'{self.product.name}'
+
+    class Meta:
+        verbose_name = 'Товар в корзине'
+        verbose_name_plural = 'Товары в корзине'

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Status, Order, ProductInOrder
+from .models import Status, Order, ProductInOrder, ProductInBasket
 
 
 class ProductImageInLine(admin.TabularInline):
@@ -35,6 +35,15 @@ class ProductInOrderAdmin(admin.ModelAdmin):
         model = ProductInOrder
 
 
+class ProductInBasketAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ProductInBasket._meta.fields]
+    list_filter = ['order', 'product', 'is_active']
+
+    class Meta:
+        model = ProductInBasket
+
+
 admin.site.register(Status, StatusAdmin)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(ProductInOrder, ProductInOrderAdmin)
+admin.site.register(ProductInBasket, ProductInBasketAdmin)
