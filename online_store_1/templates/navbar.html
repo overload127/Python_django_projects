@@ -35,10 +35,18 @@
       <ul class="nav navbar-nav navbar-right mr-5">
         <li>
           <div class="basket-conteiner">
-            <a class="nav-link" href="">Корзина <span id="basket_total_number"></span></a>
+            <a class="nav-link" href="">Корзина <span id="basket_total_number">
+              {% if products_total_number %}
+                ({{ products_total_number }})
+              {% else %}
+                (0)
+              {% endif %}
+            </span></a>
             <div class="basket-items d-none">
               <ul class="">
-                <li>wwww</li>
+                {% for item in items_in_basket %}
+                  <li>{{ item.product.name }}, {{ item.number }}шт. по {{ item.product.price }}руб. <a class="delete-item" href="#" data-product_id="{{ item.id }}">x</a></li>
+                {% endfor %}
               </ul>
             </div>
           </div>
