@@ -6,7 +6,10 @@ from django.contrib.auth.forms import UserChangeForm
 from . import models
 
 
-@admin.register(User)
+class LessonsInlineAdmin(admin.TabularInline):
+    model = models.AdvUser.lessons.through
+
+@admin.register(models.AdvUser)
 class AdvUserAdmin(admin.ModelAdmin):
     change_user_password_template = None
     fieldsets = (
@@ -25,6 +28,7 @@ class AdvUserAdmin(admin.ModelAdmin):
     ordering = ('username',)
     filter_horizontal = ('groups', 'user_permissions',)
     readonly_fields = ('last_login', 'date_joined')
+    inlines = (LessonsInlineAdmin,)
     form = UserChangeForm
 
     def lookup_allowed(self, lookup, value):
@@ -33,4 +37,39 @@ class AdvUserAdmin(admin.ModelAdmin):
             'password') and super().lookup_allowed(lookup, value)
 
 
-admin.site.register(models.AdvUser, AdvUserAdmin)
+class FollowersInlineAdmin(admin.TabularInline):
+    model = models.Lesson.followers.through
+
+
+@admin.register(models.Lesson)
+class LessonAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {'fields': ('title',)}),
+        (_('Personal info'), {'fields': ('author',)}),
+        (_('Important dates'), {'fields': ('created', 'update', 'published')}),
+    )
+    inlines = (FollowersInlineAdmin,)
+    readonly_fields = ('update',)
+    list_display = ('id', 'title', 'author', 'created', 'update', 'published')
+    search_fields = ('title', 'author')
+
+    class Meta:
+        model = models.Lesson
+
+
+@admin.register(models.LesonTube)
+class LesonTubeAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {'fields': ('title',)}),
+        (_('Personal info'), {'fields': ('author',)}),
+        (_('Important dates'), {'fields': ('created',)}),
+    )
+    readonly_fields = ('created',)
+    list_display = ('id', 'title', 'author', 'created')
+    search_fields = ('title', 'author')
+
+    class Meta:
+        model = models.LesonTube
+
+
+# admin.site.register(models.AdvUser, AdvUserAdmin)
