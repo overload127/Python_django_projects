@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
+from django.conf import settings
 
 
 class AdvUser(AbstractUser):
@@ -9,7 +10,7 @@ class AdvUser(AbstractUser):
     send_message = models.BooleanField(
         default=True, verbose_name='Слать оповещения о новых коментариях?')
     lessons = models.ManyToManyField(
-        'Lesson', through='FollowerOfLesson', related_name='+',
+        'Lesson', related_name='+',
         verbose_name='Доступные уроки')
 
     class Meta(AbstractUser.Meta):
@@ -19,11 +20,8 @@ class AdvUser(AbstractUser):
 class Lesson(models.Model):
     title = models.CharField(
         max_length=250, verbose_name='Название урока')
-    followers = models.ManyToManyField(
-        'AdvUser', through='FollowerOfLesson', related_name='+',
-        verbose_name='Подписчики на урок')
     author = models.ForeignKey(
-        AdvUser, blank=True, null=True, default=None,
+        settings.AUTH_USER_MODEL, blank=True, null=True, default=None,
         on_delete=models.SET_NULL, verbose_name='Автор урока')
     created = models.DateTimeField(
         auto_now_add=False, auto_now=False, default=timezone.now,
@@ -42,24 +40,25 @@ class Lesson(models.Model):
         verbose_name = 'Урок'
 
 
-class FollowerOfLesson(models.Model):
-    user = models.ForeignKey(AdvUser, on_delete=models.CASCADE)
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+#class FollowerOfLesson(models.Model):
+#    user = models.ForeignKey(AdvUser, on_delete=models.CASCADE)
+#    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return f'{self.user} - {self.lesson}'
+#    def __str__(self):
+#        return f'{self.user} - {self.lesson}'
 
-    class Meta:
-        db_table = 'follower_of_lesson'
+#    class Meta:
+#        db_table = 'follower_of_lesson'
 
 
-class LesonTube(models.Model):
+class LessonTube(models.Model):
     title = models.CharField(
         max_length=250, db_index=True, verbose_name='Название видео-урока')
     author = models.ForeignKey(
-        AdvUser, null=True, default=None, on_delete=models.SET_NULL,
-        verbose_name='Автор урока')
-    path_file = models.FileField(max_length=100, verbose_name='Видео-урок')
+        settings.AUTH_USER_MODEL, blank=True, null=True, default=None,
+        on_delete=models.SET_NULL, verbose_name='Автор урока')
+    video_path = models.FileField(max_length=100, upload_to='uploads/',
+                                  verbose_name='Видео-урок')
     created = models.DateTimeField(
         auto_now_add=False, auto_now=False, default=timezone.now,
         verbose_name='Создан')
