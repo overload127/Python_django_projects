@@ -38,18 +38,20 @@ class LessonAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('title',)}),
         (_('Personal info'), {'fields': ('author',)}),
+        (_('Связанные видео-уроки'), {'fields': ('lessons_video',)}),
         (_('Important dates'), {'fields': ('created', 'update', 'published')}),
     )
     readonly_fields = ('update',)
     list_display = ('id', 'title', 'author', 'created', 'update', 'published')
     search_fields = ('title', 'author__username')
+    filter_horizontal = ('lessons_video',)
 
     class Meta:
         model = models.Lesson
 
 
-@admin.register(models.LessonTube)
-class LessonTubeAdmin(admin.ModelAdmin):
+@admin.register(models.LessonVideo)
+class LessonVideoAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('title',)}),
         (_('Personal info'), {'fields': ('author',)}),
@@ -61,7 +63,4 @@ class LessonTubeAdmin(admin.ModelAdmin):
     search_fields = ('title', 'author__username')
 
     class Meta:
-        model = models.LessonTube
-
-
-# admin.site.register(models.AdvUser, AdvUserAdmin)
+        model = models.LessonVideo

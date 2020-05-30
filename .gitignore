@@ -133,3 +133,9 @@ dmypy.json
 
 # python security settings
 security.py
+
+# python loading files
+media
+
+# python migration for bd
+migrations

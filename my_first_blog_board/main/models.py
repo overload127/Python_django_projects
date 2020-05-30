@@ -1,7 +1,11 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import FileExtensionValidator
+from .validators import validate_mp4
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
+
+from .utilities import get_timestamp_path
 
 
 class AdvUser(AbstractUser):
@@ -10,7 +14,7 @@ class AdvUser(AbstractUser):
     send_message = models.BooleanField(
         default=True, verbose_name='Слать оповещения о новых коментариях?')
     lessons = models.ManyToManyField(
-        'Lesson', related_name='+',
+        'Lesson', blank=True,
         verbose_name='Доступные уроки')
 
     class Meta(AbstractUser.Meta):
@@ -22,7 +26,8 @@ class Lesson(models.Model):
         max_length=250, verbose_name='Название урока')
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, blank=True, null=True, default=None,
-        on_delete=models.SET_NULL, verbose_name='Автор урока')
+        on_delete=models.SET_NULL,
+        verbose_name='Автор урока')
     created = models.DateTimeField(
         auto_now_add=False, auto_now=False, default=timezone.now,
         verbose_name='Создан')
@@ -31,6 +36,9 @@ class Lesson(models.Model):
     published = models.DateTimeField(
         auto_now_add=False, db_index=True, blank=True, null=True,
         verbose_name='Опубликовано')
+    lessons_video = models.ManyToManyField(
+        'LessonVideo', blank=True,
+        verbose_name='Видео-уроки')
 
     def __str__(self):
         return f'{self.title}'
@@ -40,25 +48,17 @@ class Lesson(models.Model):
         verbose_name = 'Урок'
 
 
-#class FollowerOfLesson(models.Model):
-#    user = models.ForeignKey(AdvUser, on_delete=models.CASCADE)
-#    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
-
-#    def __str__(self):
-#        return f'{self.user} - {self.lesson}'
-
-#    class Meta:
-#        db_table = 'follower_of_lesson'
-
-
-class LessonTube(models.Model):
+class LessonVideo(models.Model):
     title = models.CharField(
         max_length=250, db_index=True, verbose_name='Название видео-урока')
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, blank=True, null=True, default=None,
-        on_delete=models.SET_NULL, verbose_name='Автор урока')
-    video_path = models.FileField(max_length=100, upload_to='uploads/',
-                                  verbose_name='Видео-урок')
+        on_delete=models.SET_NULL,
+        verbose_name='Автор урока')
+    video_path = models.FileField(
+        max_length=100, upload_to=get_timestamp_path,
+        validators=[FileExtensionValidator(['mp4']), validate_mp4],
+        verbose_name='Видео-урок')
     created = models.DateTimeField(
         auto_now_add=False, auto_now=False, default=timezone.now,
         verbose_name='Создан')
