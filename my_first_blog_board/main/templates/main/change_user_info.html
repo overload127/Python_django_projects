@@ -3,10 +3,13 @@
 {% block title %}Профиль - изменение данных{% endblock title %}
 
 {% block content %}
-<h2>Правка данных пользователя {{ user.username }}</h2>
+<h1>Правка данных пользователя {{ user.username }}</h1>
 <form id="change_form" method="post">
     {% csrf_token %}
     {{ form }}
     <button type="submit" form="change_form">Сохранить</button>
 </form>
+<div>
+    <a href="{% url 'main:password_change_page' %}">Изменить пароль</a></li>
+</div>
 {% endblock content %}

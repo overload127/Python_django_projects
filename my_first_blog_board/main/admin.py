@@ -37,12 +37,13 @@ class AdvUserAdmin(admin.ModelAdmin):
 class LessonAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('title',)}),
-        (_('Personal info'), {'fields': ('author',)}),
+        (_('Personal info'), {'fields': ('author', 'is_active')}),
         (_('Связанные видео-уроки'), {'fields': ('lessons_video',)}),
         (_('Important dates'), {'fields': ('created', 'update', 'published')}),
     )
     readonly_fields = ('update',)
-    list_display = ('id', 'title', 'author', 'created', 'update', 'published')
+    list_display = ('id', 'title', 'author', 'created', 'update', 'published', 'is_active')
+    list_filter = ('is_active',)
     search_fields = ('title', 'author__username')
     filter_horizontal = ('lessons_video',)
 
@@ -54,12 +55,13 @@ class LessonAdmin(admin.ModelAdmin):
 class LessonVideoAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('title',)}),
-        (_('Personal info'), {'fields': ('author',)}),
+        (_('Personal info'), {'fields': ('author', 'is_active')}),
         (_('Контент'), {'fields': ('video_path',)}),
         (_('Important dates'), {'fields': ('created',)}),
     )
     readonly_fields = ('created',)
-    list_display = ('id', 'title', 'author', 'created')
+    list_display = ('id', 'title', 'author', 'created', 'is_active')
+    list_filter = ('is_active',)
     search_fields = ('title', 'author__username')
 
     class Meta:

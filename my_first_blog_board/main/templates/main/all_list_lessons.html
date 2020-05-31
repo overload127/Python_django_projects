@@ -1,0 +1,17 @@
+{% extends "layout/profile.html" %}
+
+
+{% block content_profile %}
+
+<h2>Список всех уроков:</h2>
+
+{% for lesson in lessons %}
+    <div>
+        <h3>{{ lesson.title }}</h3>
+        <p>Автор: {{ lesson.author__first_name }} {{ lesson.author__last_name }}</p>
+        <p>Длительность: неизвестно</p>
+        <p><a href="{% url 'main:lesson_detail' pk=lesson.id %}">Открыть</a></p>
+    </div>
+{% endfor %}
+
+{% endblock content_profile %}

@@ -1,0 +1,23 @@
+{% extends "layout/basic_auth.html" %}
+
+{% block title %}Профиль{% endblock title %}
+
+{% block content %}
+<h1>Профиль пользователя {{ user.username }}</h1>
+{% if user.first_name and user.last_name %}
+<p>Здравствуйте, {{ user.first_name}} {{ user.last_name }}!</p>
+{% else %}
+<p>Здравствуйте!</p>
+{% endif %}
+
+
+<ol>
+    <li><a href="{% url 'main:profile_page' %}">Статистика прохождения уроков</a></li>
+    <li><a href="{% url 'main:profile_all_list_lessons_page' %}">Все уроки</a></li>
+    <li><a href="{% url 'main:profile_buy_list_lessons_page' %}">Купленные уроки</a></li>
+</ol>
+
+{% block content_profile %}
+{% endblock content_profile %}
+
+{% endblock content %}

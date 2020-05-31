@@ -32,10 +32,13 @@ class Lesson(models.Model):
         auto_now_add=False, auto_now=False, default=timezone.now,
         verbose_name='Создан')
     update = models.DateTimeField(
-        auto_now_add=False, auto_now=True, verbose_name='Изменен')
+        auto_now_add=False, db_index=True, auto_now=True,
+        verbose_name='Изменен')
     published = models.DateTimeField(
         auto_now_add=False, db_index=True, blank=True, null=True,
         verbose_name='Опубликовано')
+    is_active = models.BooleanField(
+        default=True, db_index=True, verbose_name='Выводить в списке?')
     lessons_video = models.ManyToManyField(
         'LessonVideo', blank=True,
         verbose_name='Видео-уроки')
@@ -49,8 +52,9 @@ class Lesson(models.Model):
 
 
 class LessonVideo(models.Model):
+    # Fixde it размер видоса ограничить каким-нибудь нормальнымразмером.
     title = models.CharField(
-        max_length=250, db_index=True, verbose_name='Название видео-урока')
+        max_length=250, verbose_name='Название видео-урока')
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, blank=True, null=True, default=None,
         on_delete=models.SET_NULL,
@@ -59,9 +63,11 @@ class LessonVideo(models.Model):
         max_length=100, upload_to=get_timestamp_path,
         validators=[FileExtensionValidator(['mp4']), validate_mp4],
         verbose_name='Видео-урок')
+    is_active = models.BooleanField(
+        default=True, db_index=True, verbose_name='Выводить в списке?')
     created = models.DateTimeField(
         auto_now_add=False, auto_now=False, default=timezone.now,
-        verbose_name='Создан')
+        db_index=True, verbose_name='Создан')
 
     def __str__(self):
         return f'{self.title}'

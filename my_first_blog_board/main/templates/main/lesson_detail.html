@@ -1,0 +1,35 @@
+{% extends "layout/profile.html" %}
+
+
+{% block content_profile %}
+
+
+
+{% if buy %}
+<h2>{{ lesson.title }}</h2>
+
+<div>
+    <p>Автор статьи: {{ lesson.author__first_name }} {{ lesson.author__last_name }}</p>
+    <p>Длительность: неизвестно</p>
+    <h3>Видео: {{ lesson.lessons_video__title }}</h3>
+    <p>Автор видео-урока: {{ lesson.lessons_video__author__first_name }} {{ lesson.lessons_video__author__last_name }}</p>
+    <video controls
+           controlsList="nodownload"
+           poster=""
+           src="{{ MEDIA_URL }}{{ lesson.lessons_video__video_path }}"
+           width="530"
+           height="440">
+        Ваш браузер не поддерживает даный видео файл.
+    </video>
+</div>
+{% else %}
+<h2>Доступ к уроку</h2>
+
+<div>
+    <p>Урок [{{ lesson.title }}] вам пока не доступен. Обратитесь к администратуру или вашему куратору за подробностями.</p>
+</div>
+
+
+{% endif %}
+
+{% endblock content_profile %}
