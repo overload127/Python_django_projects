@@ -10,7 +10,7 @@ function ajaxSend(url, params) {
         .then(json => render(json))
         .catch(error => console.error(error))
 }
-
+/*
 const forms = document.querySelector('form[name=filter]');
 
 forms.addEventListener('submit', function (e) {
@@ -19,7 +19,7 @@ forms.addEventListener('submit', function (e) {
     let url = this.action;
     let params = new URLSearchParams(new FormData(this)).toString();
     ajaxSend(url, params);
-});
+});*/
 
 function render(data) {
     // Рендер шаблона

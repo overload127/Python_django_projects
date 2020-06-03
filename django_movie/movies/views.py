@@ -22,16 +22,19 @@ class MoviesView(GenreYear, ListView):
     """Список фильмов"""
     model = Movie
     queryset = Movie.objects.filter(draft=False)
+    paginate_by = 1
 
 
 class MovieDetailView(GenreYear, DetailView):
     """Полное описание фильма"""
     model = Movie
+    queryset = Movie.objects.filter(draft=False)
     slug_field = 'url'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['star_form'] = RatingForm()
+        context['form'] = ReviewForm()
         return context
 
 
@@ -59,6 +62,8 @@ class ActorView(GenreYear, DetailView):
 
 class FilterMoviesView(GenreYear, ListView):
     """Фильтр фильмов"""
+    paginate_by = 2
+
     def get_queryset(self):
         kwargs = {}
         if self.request.GET.getlist('year'):
@@ -67,7 +72,13 @@ class FilterMoviesView(GenreYear, ListView):
         if self.request.GET.getlist("genre"):
             kwargs['genres__in'] = self.request.GET.getlist('genre')
 
-        return Movie.objects.filter(**kwargs)
+        return Movie.objects.filter(**kwargs).distinct()
+
+    def get_content_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['year'] = ''.join([f'year={x}&' for x in self.request.GET.getlist('year')])
+        context['genre'] = ''.join([f'genre={x}&' for x in self.request.GET.getlist('genre')])
+        return context
 
 
 class JsonFilterMoviesView(ListView):
@@ -110,3 +121,16 @@ class AddStarRating(View):
             return HttpResponse(status=201)
         else:
             return HttpResponse(status=400)
+
+
+class Search(ListView):
+    """Поиск фильмов"""
+    paginate_by = 2
+
+    def get_queryset(self):
+        return Movie.objects.filter(title__icontains=self.request.GET.get('q'))
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['q'] = f'q={self.request.GET.get("q")}&'
+        return context
